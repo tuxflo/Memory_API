@@ -1,4 +1,4 @@
-Memmory_API
+Memory_API
 ===========
 
 The basic API for a Memory game
