@@ -3,6 +3,8 @@
 Card::Card()
 {
     _turned = false;
+    //Start value 100, for each "not right" turning subtracting 10 points
+    _points = 100;
 }
 
 void Card::set_turned(bool b)
@@ -39,4 +41,14 @@ void Card::set_id(int id)
 int Card::get_id()
 {
     return _id;
+}
+
+void Card::set_points(int p)
+{
+    _points -= p;
+}
+
+int Card::get_points()
+{
+    return _points;
 }

@@ -31,11 +31,11 @@ void Board::choose_card()
 {
     int r;
     int c;
-    std::cout << "Please enter row: ";
+    std::cout << "Please select row: ";
     std::cin >> r;
     if(!_set_actual_row(r))
         return choose_card();
-    std::cout << "Please selecte column: ";
+    std::cout << "Please select column: ";
     std::cin >> c;
     if(!_set_actual_column(c))
         return choose_card();

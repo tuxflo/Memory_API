@@ -12,11 +12,14 @@ public:
     int get_cover();
     void set_id(int id);
     int get_id();
+    void set_points(int p);
+    int get_points();
 private:
     int _cover;
     int _picture;
     int _id;
     bool _turned;
+    int _points;
 };
 
 #endif // CARD_H
