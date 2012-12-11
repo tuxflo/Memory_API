@@ -4,11 +4,13 @@
 #include <vector>
 #include <stdlib.h>
 #include <time.h>
+#include <math.h>
 #include "card.h"
 #include "player.h"
 //Just for debugging (Setting cout to fixed size)
 #include <iomanip>
 #include <unistd.h>
+#include <algorithm>
 
 
 class Board
@@ -40,7 +42,7 @@ public:
     void _set_pictures();
     int* _shuffle_array(int *array, int array_size);
 
-    int _turn();
+    void _turn();
     bool _set_actual_row(int row);
     bool _set_actual_column(int column);
 

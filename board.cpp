@@ -2,6 +2,7 @@
 
 Board::Board(int rows, int columns)
 {
+    //Check number of cards
     if(rows*columns % 2 != 0)
     {
         std::cerr << "Error uneven number of cards!" << std::endl;
@@ -9,8 +10,15 @@ Board::Board(int rows, int columns)
     }
     _rows = rows;
     _columns = columns;
+
+    //Initialise the _card[][] array
     _cards = new Card*[rows];
-    for(int i=0; i<columns; i++)
+//    if(rows > columns)
+//    {
+//        for(int i=0; i<columns+(rows-columns); i++)
+//            _cards[i] = new Card[columns];
+//    }
+    for(int i=0; i<rows; i++)
         _cards[i] = new Card[columns];
 
     _actual_card = 0;
@@ -84,7 +92,7 @@ void Board::end_round()
         _actual_player = &_players->front();
     else
     {
-        for(int i=0; i<_players->size()-1; i++)
+        for(unsigned int i=0; i<_players->size()-1; i++)
         {
             if(_actual_player == &_players->at(i))
                 _actual_player = &_players->at(i+1);
@@ -175,7 +183,7 @@ int* Board::_shuffle_array(int *array, int array_size)
     return array;
 }
 
-int Board::_turn()
+void Board::_turn()
 {
     //First card
     if(_actual_card == 0)
@@ -231,23 +239,31 @@ bool Board::_check_game_over()
     for(int i=0; i<_rows; i++)
     {
         for(int j=0; j<_columns; j++)
+        {
             if(_cards[i][j].get_turned())
                 tmp++;
+        }
     }
     if(tmp == _rows*_columns)
     {
         std::cout << "Game over!" << std::endl;
         int max_points = _actual_player->get_score();
-        for(int i=0; i<_players->size()-1; i++)
+        for(unsigned int i=0; i<_players->size()-1; i++)
         {
             if(_players->at(i).get_score() > max_points)
             {
-                max_points = _players->at(i).get_score();
                 _actual_player = &_players->at(i);
+                max_points = _actual_player->get_score();
             }
-            //TODO check if players have the same score!
         }
-        std::cout << "Player: " << _actual_player->get_name() << " wins with" << _actual_player->get_score() << " points!" << std::endl;
+
+        //Not the best solution but so I can check if more than one player wins
+        for(unsigned int i=0; i<_players->size(); i++)
+        {
+            if(_players->at(i).get_score() == max_points)
+                std::cout << "Player: " << _players->at(i).get_name() << " wins with" << _players->at(i).get_score() << " points!" << std::endl;
+        }
+
         return true;
     }
     else
