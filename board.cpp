@@ -2,6 +2,11 @@
 
 Board::Board(int rows, int columns)
 {
+    if(rows*columns % 2 != 0)
+    {
+        std::cerr << "Error uneven number of cards!" << std::endl;
+        exit(-1);
+    }
     _rows = rows;
     _columns = columns;
     _cards = new Card*[rows];
@@ -31,11 +36,11 @@ void Board::choose_card()
 {
     int r;
     int c;
-    std::cout << "Please enter row: ";
+    std::cout << "Please select row: ";
     std::cin >> r;
     if(!_set_actual_row(r))
         return choose_card();
-    std::cout << "Please selecte column: ";
+    std::cout << "Please select column: ";
     std::cin >> c;
     if(!_set_actual_column(c))
         return choose_card();
@@ -52,8 +57,12 @@ void Board::end_round()
 
     if(_actual_card->get_id() == _second_card->get_id())
     {
-        std::cout << "Found right parir!" << std::endl;
+        std::cout << "Found right pair!" << std::endl;
+        std::cout << "Player: " << _actual_player->get_name() << " gets " << _actual_card->get_points() + _second_card->get_points() << " points!" << std::endl;
         _actual_player->add_points(_actual_card->get_points()+_second_card->get_points());
+        if(_check_game_over())
+            exit(0);
+
         _actual_card = 0;
         _second_card = 0;
 
@@ -86,14 +95,15 @@ void Board::end_round()
 
 void Board::view_board()
 {
+
     for(int i=0; i<_rows; i++)
     {
         for(int j=0; j<_columns; j++)
         {
+
             //Set output to fixed for better viewing the ids
             std::cout << std::setw(2);
             std::cout << std::setfill('0');
-
             if(_cards[i][j].get_turned())
                 std::cout <<  _cards[i][j].get_picture() << " ";
             else
@@ -102,6 +112,18 @@ void Board::view_board()
         std::cout << std::endl;
     }
     std::cout << std::endl;
+
+    //Ultimate cheating :)
+    for(int i=0; i<_rows; i++)
+    {
+        for(int j=0; j<_columns; j++)
+        {    //Set output to fixed for better viewing the ids
+            std::cout << std::setw(2);
+            std::cout << std::setfill('0');
+                std::cout <<  _cards[i][j].get_picture() << " ";
+        }
+        std::cout << std::endl;
+    }
 }
 
 void Board::_set_pictures()
@@ -133,6 +155,7 @@ void Board::_set_pictures()
             size++;
         }
     }
+    delete [] picture_ids;
     view_board();
 }
 
@@ -200,4 +223,33 @@ bool Board::_set_actual_column(int column)
     }
     _act_column = column;
     return true;
+}
+
+bool Board::_check_game_over()
+{
+    int tmp = 0;
+    for(int i=0; i<_rows; i++)
+    {
+        for(int j=0; j<_columns; j++)
+            if(_cards[i][j].get_turned())
+                tmp++;
+    }
+    if(tmp == _rows*_columns)
+    {
+        std::cout << "Game over!" << std::endl;
+        int max_points = _actual_player->get_score();
+        for(int i=0; i<_players->size()-1; i++)
+        {
+            if(_players->at(i).get_score() > max_points)
+            {
+                max_points = _players->at(i).get_score();
+                _actual_player = &_players->at(i);
+            }
+            //TODO check if players have the same score!
+        }
+        std::cout << "Player: " << _actual_player->get_name() << " wins with" << _actual_player->get_score() << " points!" << std::endl;
+        return true;
+    }
+    else
+        return false;
 }

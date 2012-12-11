@@ -43,6 +43,8 @@ public:
     int _turn();
     bool _set_actual_row(int row);
     bool _set_actual_column(int column);
+
+    bool _check_game_over();
 };
 
 #endif // BOARD_H

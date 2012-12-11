@@ -45,7 +45,8 @@ int Card::get_id()
 
 void Card::set_points(int p)
 {
-    _points -= p;
+    if(_points > 0)
+        _points -= p;
 }
 
 int Card::get_points()
