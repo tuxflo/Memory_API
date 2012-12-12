@@ -8,14 +8,13 @@ int main()
 {
     Board board(3,4);
     vector<Player> players(2);
-    players.at(0).set_name_id("tuxflo", 0);
-    players.at(1).set_name_id("anne", 1);
+    players.at(0).set_name("tuxflo");
+    players.at(1).set_name("anne");
     board.init_game(&players);
 
-    while(1)
-    {
-        board.choose_card();
-    }
+    board.turn(0, 0);
+    board.turn(1, 1);
+
     return 0;
 }
 

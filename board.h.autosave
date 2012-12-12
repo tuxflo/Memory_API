@@ -19,10 +19,7 @@ public:
     Board(int rows, int columns);
     ~Board();
     void init_game(std::vector<Player> *p);
-
-    void choose_card();
     void end_round();
-
     void turn(int row, int column);
 
     //For debugging
@@ -40,7 +37,10 @@ public:
     void _set_pictures();
     int* _shuffle_array(int *array, int array_size);
 
+    //Returns true if a pair is found
     bool _match();
+
+    //Checks if the card was the last card
     bool _check_game_over();
 };
 

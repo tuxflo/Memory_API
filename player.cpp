@@ -20,8 +20,7 @@ void Player::add_points(int points)
     _score += points;
 }
 
-void Player::set_name_id(std::string name, int id)
+void Player::set_name(std::string name)
 {
     _name = name;
-    _player_id = id;
 }

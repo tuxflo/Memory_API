@@ -216,7 +216,6 @@ bool Board::_check_game_over()
                 max_points = _actual_player->get_score();
             }
         }
-
         //Not the best solution but so I can check if more than one player wins
         for(unsigned int i=0; i<_players->size(); i++)
         {
