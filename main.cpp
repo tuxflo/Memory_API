@@ -6,15 +6,27 @@ using namespace std;
 
 int main()
 {
-    Board board(3,4);
+    Board board(2,2);
     vector<Player> players(2);
     players.at(0).set_name("tuxflo");
     players.at(1).set_name("anne");
     board.init_game(&players);
 
     board.turn(0, 0);
-    board.turn(1, 1);
-
+    board.turn(1, 0);
+    //Check if cards match and do something if they match
+    if(!board.match())
+    {
+        //Cards do not match turn them back and select next player
+        board.end_round();
+    }
+    //Card matches check if it was the last card
+    else
+        if(board.check_game_over())
+        {
+            //funny win animation here
+            ;
+        }
     return 0;
 }
 

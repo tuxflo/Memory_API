@@ -37,18 +37,14 @@ void Board::init_game(std::vector<Player> *p)
 
 void Board::end_round()
 {
-    if(!_match())
-    {
-        _actual_card->set_turned(false);
-        _actual_card->set_points(10);
-        _second_card->set_turned(false);
-        _second_card->set_points(10);
-        _actual_card = 0;
-        _second_card = 0;
-    }
     view_board();
+    _actual_card->set_turned(false);
+    _actual_card->set_points(10);
+    _second_card->set_turned(false);
+    _second_card->set_points(10);
+    _actual_card = 0;
+    _second_card = 0;
     //Find the next player and show the name
-
     if(_actual_player == &_players->at(_players->size()-1))
         _actual_player = &_players->front();
     else
@@ -111,7 +107,7 @@ void Board::_set_pictures()
     }
 
     //Shuffle the array for randomly placing the pictures
-    picture_ids = _shuffle_array(picture_ids, count);
+    //picture_ids = _shuffle_array(picture_ids, count);
 
     //Add the pictures to the board
     int size=0; //Counter for converting the array picture_ids to the 2d array
@@ -125,7 +121,6 @@ void Board::_set_pictures()
         }
     }
     delete [] picture_ids;
-    view_board();
 }
 
 int* Board::_shuffle_array(int *array, int array_size)
@@ -144,16 +139,13 @@ int* Board::_shuffle_array(int *array, int array_size)
     return array;
 }
 
-bool Board::_match()
+bool Board::match()
 {
     if(_actual_card->get_id() == _second_card->get_id())
     {
         std::cout << "Found right pair!" << std::endl;
         std::cout << "Player: " << _actual_player->get_name() << " gets " << _actual_card->get_points() + _second_card->get_points() << " points!" << std::endl;
         _actual_player->add_points(_actual_card->get_points()+_second_card->get_points());
-        if(_check_game_over())
-            exit(0);
-
         _actual_card = 0;
         _second_card = 0;
         return true;
@@ -178,22 +170,16 @@ void Board::turn(int row, int column)
         _actual_card = &_cards[row][column];
         _actual_card->set_turned(true);
 
-        //Just for debugging
-        view_board();
     }
     //Second card
     else
     {
         _second_card = &_cards[row][column];
         _second_card->set_turned(true);
-       //Just for debugging
-        view_board();
-
-        end_round();
     }
 }
 
-bool Board::_check_game_over()
+bool Board::check_game_over()
 {
     int tmp = 0;
     for(int i=0; i<_rows; i++)
@@ -206,24 +192,6 @@ bool Board::_check_game_over()
     }
     if(tmp == _rows*_columns)
     {
-        std::cout << "Game over!" << std::endl;
-        int max_points = _actual_player->get_score();
-        for(unsigned int i=0; i<_players->size()-1; i++)
-        {
-            if(_players->at(i).get_score() > max_points)
-            {
-                _actual_player = &_players->at(i);
-                max_points = _actual_player->get_score();
-            }
-        }
-
-        //Not the best solution but so I can check if more than one player wins
-        for(unsigned int i=0; i<_players->size(); i++)
-        {
-            if(_players->at(i).get_score() == max_points)
-                std::cout << "Player: " << _players->at(i).get_name() << " wins with" << _players->at(i).get_score() << " points!" << std::endl;
-        }
-
         return true;
     }
     else
