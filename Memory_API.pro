@@ -3,13 +3,12 @@ CONFIG += console
 CONFIG -= app_bundle
 CONFIG -= qt
 
-SOURCES += main.cpp \
-    card.cpp \
-    board.cpp \
-    player.cpp
+SOURCES += \
+    lib/src/player.cpp \
+    ../Memory_API_build/main.cpp
 
 HEADERS += \
-    card.h \
-    board.h \
-    player.h
+    lib/includes/player.h \
+    lib/includes/card.h \
+    lib/includes/board.h
 

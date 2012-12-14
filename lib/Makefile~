@@ -1,0 +1,15 @@
+CC=g++
+CFLAGS=-c -Wall
+
+TARGET=lib$(LIBNAME)
+SOURCES=$(wildcard bin/**/*.cpp) $(wildcard bin/**/**/*.cpp)
+OBJS=$(SOURCES: .cpp=.o)
+
+all: $(SOURCES) $(TARGET) 
+
+$(TARGET) :$(OBJS)
+	$(CC) -O bin/$@ $(OBJS)
+
+.cpp.o:
+	$(CC) -o $@ $(CFLAGS) $?
+	
