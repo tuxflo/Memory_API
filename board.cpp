@@ -1,4 +1,5 @@
 #include "board.h"
+#include <../Memory_API/card.h>
 
 Board::Board(int rows, int columns)
 {
@@ -27,17 +28,17 @@ Board::~Board()
     delete[] _cards;
 }
 
-void Board::init_game(std::vector<Player> *p)
+void Board::init_game(std::vector<Player> *p, std::string pictures, std::string cover)
 {
     _players = p;
     _actual_player = &_players->front();
-    std::cout << "First Player: " << _actual_player->get_name() << std::endl;
-    _set_pictures();
+    //std::cout << "First Player: " << _actual_player->get_name() << std::endl;
+    _set_pictures(pictures, cover);
 }
 
 void Board::end_round()
 {
-    view_board();
+    //view_board();
     _actual_card->set_turned(false);
     _actual_card->set_points(10);
     _second_card->set_turned(false);
@@ -55,7 +56,7 @@ void Board::end_round()
                 _actual_player = &_players->at(i+1);
         }
     }
-    std::cout << "Now its your turn " << _actual_player->get_name()  << " Actual score: " << _actual_player->get_score() << std::endl;
+    //std::cout << "Now its your turn " << _actual_player->get_name()  << " Actual score: " << _actual_player->get_score() << std::endl;
 }
 
 void Board::view_board()
@@ -72,7 +73,7 @@ void Board::view_board()
             if(_cards[i][j].get_turned())
                 std::cout <<  _cards[i][j].get_picture() << " ";
             else
-                std::cout << _cards[i][j].get_cover() << " ";
+                std::cout << get_cover() << " ";
         }
         std::cout << std::endl;
     }
@@ -91,9 +92,14 @@ void Board::view_board()
     }
 }
 
-void Board::_set_pictures()
+void Board::_set_pictures(std::string pictures, std::string cover)
 {
     int count = _rows * _columns;
+
+    //Set the cover (the same for all cards)
+    _cover = cover;
+
+    std::stringstream directory_name;
 
     //Set the Id of the cards in the right order (from 1-count/2)
     int *picture_ids = new int [count];
@@ -107,7 +113,7 @@ void Board::_set_pictures()
     }
 
     //Shuffle the array for randomly placing the pictures
-    //picture_ids = _shuffle_array(picture_ids, count);
+    picture_ids = _shuffle_array(picture_ids, count);
 
     //Add the pictures to the board
     int size=0; //Counter for converting the array picture_ids to the 2d array
@@ -115,9 +121,12 @@ void Board::_set_pictures()
     {
         for(int j=0; j<_columns; j++)
         {
-            _cards[i][j].set_picture(picture_ids[size], 0);
+            //The Picture is the directory name + the card name like /pictures/1
+            directory_name << pictures << picture_ids[size];
+            _cards[i][j].set_picture(directory_name.str());
             _cards[i][j].set_id(picture_ids[size]);
             size++;
+            directory_name.str("");
         }
     }
     delete [] picture_ids;
@@ -153,6 +162,17 @@ bool Board::match()
     return false;
 }
 
+std::string Board::get_picture(int row, int column)
+{
+    return _cards[row][column].get_picture();
+}
+
+std::string Board::get_cover()
+{
+    //All cards have the same cover so it does not matter which one we take
+    return _cover;
+}
+
 void Board::turn(int row, int column)
 {
     if(row < 0 || row > _rows-1)
@@ -177,6 +197,21 @@ void Board::turn(int row, int column)
         _second_card = &_cards[row][column];
         _second_card->set_turned(true);
     }
+}
+
+std::string Board::get_actual_player_name()
+{
+    return _actual_player->get_name();
+}
+
+int Board::get_actual_player_score()
+{
+    return _actual_player->get_score();
+}
+
+bool Board::get_turned(int row, int column)
+{
+    return _cards[row][column].get_turned();
 }
 
 bool Board::check_game_over()

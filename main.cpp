@@ -10,7 +10,8 @@ int main()
     vector<Player> players(2);
     players.at(0).set_name("tuxflo");
     players.at(1).set_name("anne");
-    board.init_game(&players);
+    board.init_game(&players, "/home/tuxflo/Pictures/", "cover");
+    board.view_board();
 
     board.turn(0, 0);
     board.turn(1, 0);

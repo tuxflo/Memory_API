@@ -17,20 +17,14 @@ bool Card::get_turned()
     return _turned;
 }
 
-void Card::set_picture(int pic, int cover)
+void Card::set_picture(std::string pic)
 {
     _picture = pic;
-    _cover = cover;
 }
 
-int Card::get_picture()
+std::string Card::get_picture()
 {
     return _picture;
-}
-
-int Card::get_cover()
-{
-    return _cover;
 }
 
 void Card::set_id(int id)
