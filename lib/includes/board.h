@@ -16,6 +16,11 @@ template <class T>
 class Board
 {
 public:
+    T get_card(int row, int column)
+    {
+        return _cards[row][column].get_picture();
+    }
+
     Board(int rows, int columns)
     {
         //Check number of cards
@@ -28,9 +33,9 @@ public:
         _columns = columns;
 
         //Initialise the _card[][] array
-        _cards = new Card<int>*[rows];
+        _cards = new Card<T>*[rows];
         for(int i=0; i<rows; i++)
-            _cards[i] = new Card<int>[columns];
+            _cards[i] = new Card<T>[columns];
 
         _actual_card = 0;
         _second_card = 0;
@@ -43,12 +48,12 @@ public:
         delete[] _cards;
     }
 
-    void init_game(std::vector<Player> *p)
+    void init_game(std::vector<Player> *p, std::vector<T> *pictures, T cover)
     {
         _players = p;
         _actual_player = &_players->front();
         std::cout << "First Player: " << _actual_player->get_name() << std::endl;
-        _set_pictures();
+        _set_pictures(pictures, cover);
     }
 
     void end_round()
@@ -150,8 +155,7 @@ public:
             {
 
                 //Set output to fixed for better viewing the ids
-                std::cout << std::setw(2);
-                std::cout << std::setfill('0');
+
                 if(_cards[i][j].get_turned())
                     std::cout <<  _cards[i][j].get_picture() << " ";
                 else
@@ -168,7 +172,7 @@ public:
             {    //Set output to fixed for better viewing the ids
                 std::cout << std::setw(2);
                 std::cout << std::setfill('0');
-                    std::cout <<  _cards[i][j].get_picture() << " ";
+                    std::cout <<  _cards[i][j].get_id() << " ";
             }
             std::cout << std::endl;
         }
@@ -183,7 +187,8 @@ public:
 
     std::vector<Player> *_players;
     Player *_actual_player;
-    void _set_pictures()
+
+    void _set_pictures(std::vector<T> *pictures, T cover)
     {
         int count = _rows * _columns;
 
@@ -199,7 +204,7 @@ public:
         }
 
         //Shuffle the array for randomly placing the pictures
-        //picture_ids = _shuffle_array(picture_ids, count);
+        picture_ids = _shuffle_array(picture_ids, count);
 
         //Add the pictures to the board
         int size=0; //Counter for converting the array picture_ids to the 2d array
@@ -207,7 +212,7 @@ public:
         {
             for(int j=0; j<_columns; j++)
             {
-                _cards[i][j].set_picture(picture_ids[size], 0);
+                _cards[i][j].set_picture(pictures->at(size), cover);
                 _cards[i][j].set_id(picture_ids[size]);
                 size++;
             }

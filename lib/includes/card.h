@@ -22,18 +22,18 @@ public:
         return _turned;
     }
 
-    void set_picture(T pic, int cover)
+    void set_picture(T pic, T cover)
     {
         _picture = pic;
         _cover = cover;
     }
 
-    int get_picture()
+    T get_picture()
     {
         return _picture;
     }
 
-    int get_cover()
+    T get_cover()
     {
         return _cover;
     }
@@ -60,7 +60,7 @@ public:
     }
 
 private:
-    int _cover;
+    T _cover;
     T _picture;
     int _id;
     bool _turned;
