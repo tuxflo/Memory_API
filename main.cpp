@@ -14,6 +14,8 @@ int main()
     board.view_board();
 
     board.turn(0, 0);
+    if(board.match())
+        cout << "Geht doch gar nicht!";
     board.turn(1, 0);
     //Check if cards match and do something if they match
     if(!board.match())

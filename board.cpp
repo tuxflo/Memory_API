@@ -148,18 +148,21 @@ int* Board::_shuffle_array(int *array, int array_size)
     return array;
 }
 
-bool Board::match()
+int Board::match()
 {
+    if(_second_card == 0)
+        return 0;
     if(_actual_card->get_id() == _second_card->get_id())
     {
-        std::cout << "Found right pair!" << std::endl;
-        std::cout << "Player: " << _actual_player->get_name() << " gets " << _actual_card->get_points() + _second_card->get_points() << " points!" << std::endl;
+        //std::cout << "Found right pair!" << std::endl;
+        //std::cout << "Player: " << _actual_player->get_name() << " gets " << _actual_card->get_points() + _second_card->get_points() << " points!" << std::endl;
+        int points = _actual_card->get_points() + _second_card->get_points();
         _actual_player->add_points(_actual_card->get_points()+_second_card->get_points());
         _actual_card = 0;
         _second_card = 0;
-        return true;
+        return points;
     }
-    return false;
+    return 0;
 }
 
 std::string Board::get_picture(int row, int column)
@@ -183,7 +186,10 @@ void Board::turn(int row, int column)
     if(row < 0 || row > _columns-1)
     {
         std::cerr << "Error: Column " << column << " not in grid";
+        exit(-1);
     }
+
+
     //First card
     if(_actual_card == 0)
     {
@@ -191,6 +197,7 @@ void Board::turn(int row, int column)
         _actual_card->set_turned(true);
 
     }
+
     //Second card
     else
     {

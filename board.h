@@ -32,19 +32,20 @@ public:
 
     bool check_game_over();
 
-    //Returns true if a pair is found
-    bool match();
+    //Returns 0 if a pair does not match else it returns the value of the points the player recieved
+    int match();
 
     std::string get_picture(int row, int column);
     std::string get_cover();
     //For debugging
     void view_board();
+    Card **_cards;
+
 
  private:
     std::string _cover;
     int _rows;
     int _columns;    
-    Card **_cards;
     Card *_actual_card;
     Card *_second_card;
 
