@@ -1,4 +1,4 @@
-#include "card.h"
+#include "./include/card.h"
 
 Card::Card()
 {
@@ -17,14 +17,14 @@ bool Card::get_turned()
     return _turned;
 }
 
-void Card::set_picture(std::string pic)
+void Card::set_picture_path(std::string pic)
 {
-    _picture = pic;
+    _picture_path = pic;
 }
 
-std::string Card::get_picture()
+std::string Card::get_picture_path()
 {
-    return _picture;
+    return _picture_path;
 }
 
 void Card::set_id(int id)
