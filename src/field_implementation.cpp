@@ -29,6 +29,7 @@ Field_Implementation::Field_Implementation(int rows, int columns) :
 
 Field_Implementation::~Field_Implementation()
 {
+    std::cerr << "Field_Implementation Destructor!" << std::endl;
     for(int i=0; i<_rows; i++)
         delete [] _cards[i];
     delete[] _cards;
@@ -38,7 +39,7 @@ bool Field_Implementation::turn(int row, int column)
 {
     if(row < 0 || row > _rows-1)
         return false;
-    if(row < 0 || row > _columns-1)
+    if(column < 0 || column > _columns-1)
         return false;
 
     _state->turn(row, column);
@@ -80,6 +81,11 @@ int Field_Implementation::get_recieved_points()
     return _recieved_points;
 }
 
+int Field_Implementation::get_num_of_players()
+{
+    return _players->size();
+}
+
 void Field_Implementation::end_round()
 {
     //Find the next player and set him/her active
@@ -98,25 +104,29 @@ void Field_Implementation::set_picture_path(std::string picture_path)
 {
     int count = _rows * _columns;
 
-    //Set the cover (the same for all cards)
-    //_cover = cover;
-
     std::stringstream directory_name;
-
+    std::string *complete_name = new std::string[count];
+    std::string subfolder = "/1/";
     //Set the Id of the cards in the right order (from 1-count/2)
     int *picture_ids = new int [count];
     int tmp = 1;
     for(int i=0; i<count; i++)
     {
         if(tmp > count/2)
+        {
             tmp = 1;
+            subfolder = "/2/";
+        }
         picture_ids[i] = tmp;
+        directory_name << picture_path << subfolder << picture_ids[i];
+        complete_name[i] = directory_name.str();
+        directory_name.str("");
         tmp++;
     }
 
     //Shuffle the array for randomly placing the pictures
-    picture_ids = _shuffle_array(picture_ids, count);
-
+    //picture_ids = _shuffle_array(picture_ids, count);
+    complete_name = _shuffle_array(complete_name, picture_ids, count);
     //Add the pictures to the board
     int size=0; //Counter for converting the array picture_ids to the 2d array
     for(int i=0; i<_rows; i++)
@@ -124,11 +134,12 @@ void Field_Implementation::set_picture_path(std::string picture_path)
         for(int j=0; j<_columns; j++)
         {
             //The Picture is the directory name + the card name like /pictures/1
-            directory_name << picture_path << picture_ids[size];
-            _cards[i][j].set_picture_path(directory_name.str());
+            //directory_name << picture_path << picture_ids[size];
+            //_cards[i][j].set_picture_path(directory_name.str());
+            _cards[i][j].set_picture_path(complete_name[size]);
             _cards[i][j].set_id(picture_ids[size]);
             size++;
-            directory_name.str("");
+            //directory_name.str("");
         }
     }
     delete [] picture_ids;
@@ -201,7 +212,7 @@ bool Field_Implementation::get_game_over()
     return _game_over;
 }
 
-int *Field_Implementation::_shuffle_array(int *array, int array_size)
+std::string *Field_Implementation::_shuffle_array(std::string *array, int *picture_ids, int array_size)
 {
     //Set time for randomizing
     srand((unsigned)time(0));
@@ -210,9 +221,12 @@ int *Field_Implementation::_shuffle_array(int *array, int array_size)
     {
         int c = i +(rand() % (array_size-i));
         //Swap values
-        int tmp = array[i];
+        std::string tmp = array[i];
         array[i] = array[c];
         array[c] = tmp;
+        int tmp2 = picture_ids[i];
+        picture_ids[i] = picture_ids[c];
+        picture_ids[c] = tmp2;
     }
     return array;
 }

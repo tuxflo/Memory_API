@@ -1,6 +1,6 @@
 #ifndef SECOND_TURN_H
 #define SECOND_TURN_H
-#include "memory_state.h"
+#include "./include/memory_state.h"
 
 class Second_Turn : public Memory_State
 {

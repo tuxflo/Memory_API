@@ -8,7 +8,7 @@
 #include "memory_state.h"
 #include "first_turn.h"
 #include "second_turn.h"
-#include "card.h"
+#include "./include/card.h"
 
 class Field_Implementation : public Game_Interface
 {
@@ -41,9 +41,9 @@ public:
     bool get_game_over();
     int match();
     int get_recieved_points();
-
+    int get_num_of_players();
 private:
-    int* _shuffle_array(int *array, int array_size);
+    std::string* _shuffle_array(std::string *array, int *picture_ids, int array_size);
 
 
     int _rows;

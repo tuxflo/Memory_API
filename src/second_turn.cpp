@@ -18,6 +18,8 @@ void Second_Turn::turn(int row, int column)
 
     //Check if they match and so on...
     _field->_state = &_field->_end_turn;
+
+    //Fake turn in the end round state
     _field->_state->turn(0,0);
     //Set state to first turn
     _field->_state = &_field->_first_turn;

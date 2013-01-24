@@ -5,6 +5,7 @@ class View
 {
 public:
     View();
+    virtual ~View(){}
     virtual void update()=0;
     virtual void turn(int row, int column)=0;
     virtual bool set_cards()=0;

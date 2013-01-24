@@ -17,6 +17,7 @@ void End_Turn::turn(int row, int column)
     {
         _field->_game_over = _field->check_game_over();
     }
-    _field->end_round();
-    _field->_state = & _field->_first_turn;
+    if(!_field->get_game_over())
+        _field->end_round();
+        _field->_state = & _field->_first_turn;
 }

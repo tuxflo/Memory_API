@@ -2,13 +2,13 @@
 #define GAME_INTERFACE_H
 #include <string>
 #include <iostream>
-#include <./include/view.h>
+#include <../Memory_API/include/view.h>
 
-#include "./include/player.h"
-#include "./include/memory_state.h"
-#include "./include/first_turn.h"
-#include "./include/second_turn.h"
-#include "./include/end_turn.h"
+#include "../Memory_API/include/player.h"
+#include "../Memory_API/include/memory_state.h"
+#include "../Memory_API/include/first_turn.h"
+#include "../Memory_API/include/second_turn.h"
+#include "../Memory_API/include/end_turn.h"
 
 class Game_Interface
 {
@@ -20,6 +20,7 @@ public:
     virtual void set_cover_path(std::string cover_path)=0;
     virtual std::string get_cover_path()=0;
     virtual void add_player(const std::string& name)=0;
+    virtual int get_num_of_players()=0;
     virtual std::string get_actual_player_name()=0;
     virtual int get_actual_player_score()=0;
     void set_view(View *view);
